@@ -61,6 +61,9 @@
         <button onclick="fetchNewImage()">
             New Cat
         </button>
+        <button onclick="saveImage()">
+            Save cat
+        </button>
         <button onclick="nextImage()">
             Next Cat
         </button>
@@ -71,6 +74,7 @@
     const API_KEY = "live_xZjBI0DsGYFT7iYVbmdmtoT8AIW0xd2AWLQYXW9Ua0dDqMYA5Ucue761hsXWdVIT";
     const headers = { 'x-api-key': API_KEY };
     const baseUrl = "https://api.thecatapi.com/v1";
+    const _localStorage = window.localStorage;
     let fetchData = [];
     let currentPage = 0;
     const imgDiv = document.getElementById('cat-image');
@@ -104,6 +108,7 @@
                 if (data && data.url) {
                     imgDiv.src = data.url;
                     fetchData = fetchData.concat(data);
+                    currentPage = fetchData.length - 1;
                 }
             })
             .catch(err => {
@@ -130,6 +135,21 @@
 
         if (fetchData[currentPage] && fetchData[currentPage].url) {
             imgDiv.src = fetchData[currentPage].url;
+        }
+    }
+
+    function saveImage() {
+        const id = fetchData[currentPage].id;
+        console.log(id);
+        if (_localStorage) {
+            const key = "favoriteCats";
+            let favCats = _localStorage.getItem(key);
+            if (favCats) {
+                favCats = JSON.parse((favCats)).concat(id);
+                _localStorage.setItem(key, JSON.stringify(favCats));
+            } else {
+                _localStorage.setItem(key, JSON.stringify([id]));
+            }
         }
     }
 
