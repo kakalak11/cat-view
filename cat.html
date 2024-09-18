@@ -150,6 +150,7 @@
     const API_KEY = "live_xZjBI0DsGYFT7iYVbmdmtoT8AIW0xd2AWLQYXW9Ua0dDqMYA5Ucue761hsXWdVIT";
     const headers = { 'x-api-key': API_KEY };
     const baseUrl = "https://api.thecatapi.com/v1";
+    const storageKey = "favoriteCats";
     const _localStorage = window.localStorage;
     let fetchData = [];
     let currentPage = 0;
@@ -220,13 +221,15 @@
     function saveImage() {
         const id = fetchData[currentPage].id;
         if (_localStorage) {
-            const key = "favoriteCats";
-            let favCats = _localStorage.getItem(key);
+            let favCats = _localStorage.getItem(storageKey);
             if (favCats) {
-                favCats = JSON.parse((favCats)).concat(id);
-                _localStorage.setItem(key, JSON.stringify(favCats));
+                favCats = JSON.parse((favCats))
+                if (favCats.findIndex(favId => id === favId) === -1) {
+                    favCats = favCats.concat(id);
+                }
+                _localStorage.setItem(storageKey, JSON.stringify(favCats));
             } else {
-                _localStorage.setItem(key, JSON.stringify([id]));
+                _localStorage.setItem(storageKey, JSON.stringify([id]));
             }
         }
         syncSavedCats();
@@ -235,8 +238,7 @@
     function getSavedImages() {
         let data = []
         if (_localStorage) {
-            const key = "favoriteCats";
-            data = _localStorage.getItem(key);
+            data = _localStorage.getItem(storageKey);
             if (data) {
                 data = JSON.parse(data);
             }
@@ -276,9 +278,15 @@
         const btnContent = document.createTextNode("Show");
         newButton.appendChild(btnContent);
 
-        newDiv.appendChild(newButton);
-        newButton.onclick = handleSavedImageClick.bind(this, content);
+        const delButton = document.createElement("button");
+        delButton.setAttribute("style", "margin-left: 10px; float: right");
+        const delBtnContent = document.createTextNode("Delete");
+        delButton.appendChild(delBtnContent);
 
+        newDiv.appendChild(newButton);
+        newDiv.appendChild(delButton);
+        newButton.onclick = handleSaveImageClick.bind(this, content);
+        delButton.onclick = handleRemoveImageClick.bind(this, content);
         favListEl.appendChild(newDiv);
     }
 
@@ -295,9 +303,24 @@
         }
     }
 
-    function handleSavedImageClick(id) {
+    function handleSaveImageClick(id) {
         fetchNewImage(id);
         modal.style.display = "none";
+    }
+
+    function handleRemoveImageClick(id) {
+        if (_localStorage) {
+            let favCats = _localStorage.getItem(storageKey);
+            if (favCats) {
+                favCats = JSON.parse((favCats))
+                const imageIndex = favCats.findIndex(favId => id === favId);
+                if (imageIndex > -1) {
+                    favCats.splice(imageIndex, 1);
+                    _localStorage.setItem(storageKey, JSON.stringify(favCats));
+                    syncSavedCats();
+                }
+            }
+        }
     }
 
     syncSavedCats();
