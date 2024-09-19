@@ -112,9 +112,6 @@
             <button onclick="prevImage()">
                 Prev Cat
             </button>
-            <button onclick="randomImageCache()">
-                Random Cache
-            </button>
             <button onclick="fetchNewImage()">
                 New Cat
             </button>
@@ -144,7 +141,22 @@
         </div>
 
     </div>
+
+    <div id="test-vue" style="position: sticky;">
+        {{count}}
+        <button @click="increment">Add</button>
+        <span v-if="wow">Wow !</span>
 </body>
+
+<script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module'
+    createApp({
+        count: 22,
+        increment() {
+            this.count++;
+        }
+    }).mount("#test-vue")
+</script>
 
 <script>
     const API_KEY = "live_xZjBI0DsGYFT7iYVbmdmtoT8AIW0xd2AWLQYXW9Ua0dDqMYA5Ucue761hsXWdVIT";
@@ -159,7 +171,7 @@
     const btn = document.getElementById("myBtn");
     const span = document.getElementsByClassName("close")[0];
 
-    fetch(`${baseUrl}/images/search?limit=10&breed_ids=beng`, headers)
+    fetch(`${baseUrl}/images/search?limit=10`, headers)
         .then((response) => response.json())
         .then(data => {
             fetchData = fetchData.concat(data);
@@ -285,7 +297,7 @@
 
         newDiv.appendChild(newButton);
         newDiv.appendChild(delButton);
-        newButton.onclick = handleSaveImageClick.bind(this, content);
+        newButton.onclick = handleSaveImageClick.bind(this, content, newDiv);
         delButton.onclick = handleRemoveImageClick.bind(this, content);
         favListEl.appendChild(newDiv);
     }
@@ -303,9 +315,11 @@
         }
     }
 
-    function handleSaveImageClick(id) {
+    function handleSaveImageClick(id, element) {
         fetchNewImage(id);
         modal.style.display = "none";
+        Array.from(favListEl.children).forEach(element => element.style.color = 'black');
+        element.style.color = "red";
     }
 
     function handleRemoveImageClick(id) {
