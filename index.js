@@ -9,14 +9,10 @@ const imgDiv = document.getElementById('cat-image');
 const modal = document.getElementById("myModal");
 const btn = document.getElementById("myBtn");
 const span = document.getElementsByClassName("close")[0];
+let params = new URLSearchParams(document.location.search);
+let id = params.get("id"); // is the string "Jonathan"
 
-fetch(`${baseUrl}/images/search?limit=10`, headers)
-    .then((response) => response.json())
-    .then(data => {
-        fetchData = fetchData.concat(data);
-
-        randomImageCache();
-    });
+fetchNewImage(id)
 
 function randomImageCache() {
     if (fetchData) {
@@ -95,7 +91,7 @@ function getSavedImages() {
             data = JSON.parse(data);
         }
     }
-    return data;
+    return data || [];
 }
 
 
