@@ -1,5 +1,5 @@
 const API_KEY = "live_xZjBI0DsGYFT7iYVbmdmtoT8AIW0xd2AWLQYXW9Ua0dDqMYA5Ucue761hsXWdVIT";
-const headers = { 'x-api-key': API_KEY };
+const headers = { 'x-api-key': API_KEY, "Access-Control-Allow-Origin": true };
 const baseUrl = "https://api.thecatapi.com/v1";
 const storageKey = "favoriteCats";
 const _localStorage = window.localStorage;
@@ -8,7 +8,10 @@ let currentPage = 0;
 const imgDiv = document.getElementById('cat-image');
 const modal = document.getElementById("myModal");
 const btn = document.getElementById("myBtn");
+const toast = document.getElementById("toast");
 const span = document.getElementsByClassName("close")[0];
+const prevBtn = document.getElementById("prev-button");
+const nextBtn = document.getElementById("next-button");
 let params = new URLSearchParams(document.location.search);
 let id = params.get("id"); // is the string "Jonathan"
 
@@ -34,6 +37,8 @@ function fetchNewImage(id) {
             }
             if (data && data.url) {
                 imgDiv.src = data.url;
+                imgDiv.width = data.width;
+                imgDiv.height = data.height;
                 fetchData = fetchData.concat(data);
                 currentPage = fetchData.length - 1;
             }
@@ -44,14 +49,25 @@ function fetchNewImage(id) {
         });
 }
 
+if (nextBtn) {
+    nextBtn.addEventListener("click", nextImage);
+}
+
+if (prevBtn) {
+    prevBtn.addEventListener("click", prevImage);
+}
+
 function nextImage() {
     currentPage++
     if (currentPage >= fetchData.length) {
         currentPage = 0;
     }
+    const data = fetchData[currentPage];
 
-    if (fetchData[currentPage] && fetchData[currentPage].url) {
-        imgDiv.src = fetchData[currentPage].url;
+    if (data && data.url) {
+        imgDiv.src = data.url;
+        imgDiv.width = data.width;
+        imgDiv.height = data.height;
     }
 }
 
@@ -60,11 +76,16 @@ function prevImage() {
     if (currentPage < 0) {
         currentPage = fetchData.length - 1;
     }
+    const data = fetchData[currentPage];
 
-    if (fetchData[currentPage] && fetchData[currentPage].url) {
-        imgDiv.src = fetchData[currentPage].url;
+    if (data && data.url) {
+        imgDiv.src = data.url;
+        imgDiv.width = data.width;
+        imgDiv.height = data.height;
     }
 }
+
+
 
 function saveImage() {
     const id = fetchData[currentPage].id;
@@ -81,6 +102,10 @@ function saveImage() {
         }
     }
     syncSavedCats();
+    toast.classList.add("active");
+    setTimeout(() => {
+        toast.classList.remove("active");
+    }, 3000);
 }
 
 function getSavedImages() {
