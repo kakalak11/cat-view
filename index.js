@@ -1,3 +1,7 @@
+import van from "https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.min.js"
+
+console.log(van);
+
 const API_KEY = "live_xZjBI0DsGYFT7iYVbmdmtoT8AIW0xd2AWLQYXW9Ua0dDqMYA5Ucue761hsXWdVIT";
 const headers = { 'x-api-key': API_KEY, "Access-Control-Allow-Origin": true };
 const baseUrl = "https://api.thecatapi.com/v1";
@@ -6,14 +10,13 @@ const _localStorage = window.localStorage;
 let fetchData = [];
 let currentPage = 0;
 const imgDiv = document.getElementById('cat-image');
-const modal = document.getElementById("myModal");
 const btn = document.getElementById("myBtn");
 const toast = document.getElementById("toast");
 const span = document.getElementsByClassName("close")[0];
 const prevBtn = document.getElementById("prev-button");
 const nextBtn = document.getElementById("next-button");
 let params = new URLSearchParams(document.location.search);
-let id = params.get("id"); // is the string "Jonathan"
+let id = params.get("id");
 
 fetchNewImage(id)
 
@@ -117,25 +120,6 @@ function getSavedImages() {
         }
     }
     return data || [];
-}
-
-
-
-// When the user clicks on the button, open the modal
-btn.onclick = function () {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
 }
 
 let favListEl = document.getElementById("favorite-list");

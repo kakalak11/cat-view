@@ -5,22 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/modal.css" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <title>Cat Viewer</title>
 
     <style>
-        header {
+        header,
+        footer {
             background-color: darkgray;
             padding: 10px;
+            text-align: center;
         }
 
         main {
-            margin-top: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
             height: auto;
         }
 
         .parent {
             display: grid;
             grid-template-columns: minmax(200px, 20%) 1fr;
+            column-gap: 10px;
         }
 
         .side-bar>button {
@@ -29,6 +34,19 @@
             margin: 0;
             margin-bottom: 10px;
             padding: 10px 24px;
+
+            border-radius: 0%;
+            border: none;
+            background-color: grey;
+            color: aliceblue;
+        }
+
+        .side-bar>button:hover {
+            background-color: lightgrey;
+        }
+
+        .side-bar>button:active {
+            background-color: darkgrey;
         }
 
         .side-bar {
@@ -89,6 +107,15 @@
         .button-container>button:active {
             background-color: green;
         }
+
+        .favorite-section {
+            background-color: burlywood;
+            padding: 10px;
+        }
+
+        .favorite-section>h3 {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -110,6 +137,12 @@
                 <button id="myBtn">
                     Open Saved
                 </button>
+
+                <section class="favorite-section">
+                    <h3>Your favorite cats</h3>
+                    <ul id="favorite-list">
+                    </ul>
+                </section>
             </aside>
             <div class="main-view">
                 <div class="image-container">
@@ -123,21 +156,10 @@
             </div>
         </div>
     </main>
-
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <section>
-                <h3>Your favorite cats</h3>
-                <ul id="favorite-list">
-                </ul>
-            </section>
-        </div>
-    </div>
+    <footer>
+        <small>Coded by kakalak</small>
+    </footer>
 </body>
-<script src="./index.js"></script>
+<script src="./index.js" type="module"></script>
 
 </html>
