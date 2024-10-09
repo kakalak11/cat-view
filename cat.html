@@ -109,6 +109,8 @@
         .favorite-section {
             background-color: burlywood;
             padding: 10px;
+            overflow-y: scroll;
+            max-height: 322px;
         }
 
         .favorite-section>ul>li {
@@ -127,49 +129,19 @@
         .favorite-section>h3 {
             text-align: center;
         }
+
+        .breed-info-list {
+            overflow-y: scroll;
+            height: calc(100% - 20px);
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <!-- <header>
-        <h1>View cat for peace of mind</h1>
-        <p>This is a front-end for cat API</p>
-        <div>Try yours here &#128073; <a href="https://thecatapi.com/">https://thecatapi.com/</a></div>
-    </header>
-    <main>
-        <div class="parent">
-            <aside class="side-bar">
-                <button onclick="fetchNewImage()">
-                    New Cat
-                </button>
-                <button onclick="saveImage()">
-                    Save cat
-                </button>
-                <button id="myBtn">
-                    Open Saved
-                </button>
-
-                <section class="favorite-section">
-                    <h3>Your favorite cats</h3>
-                    <ul id="favorite-list">
-                    </ul>
-                </section>
-            </aside>
-            <div class="main-view">
-                <div class="image-container">
-                    <img id="cat-image" alt="A cat">
-                </div>
-
-                <div class="button-container">
-                    <button id="prev-button">Previous</button>
-                    <button id="next-button">Next</button>
-                </div>
-            </div>
-        </div>
-    </main>
-    <footer>
-        <small>Coded by kakalak</small>
-    </footer> -->
 </body>
 <script src="./index.js" type="module"></script>
 

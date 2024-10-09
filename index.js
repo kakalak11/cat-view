@@ -7,82 +7,41 @@ const baseUrl = "https://api.thecatapi.com/v1";
 const storageKey = "favoriteCats";
 const _localStorage = window.localStorage;
 
-const FavoriteList = (catImageDiv) => {
-    const favList = van.state([]);
-    const currentId = van.state("");
 
-    getSavedImages();
-
-    function fetchNewImage(_, id) {
-        fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
-            .then((response) => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    data = data.pop();
-                }
-                if (data) {
-                    catImageDiv.src = data.url;
-                    catImageDiv.width = data.width;
-                    catImageDiv.height = data.height;
-
-                    currentId.val = data.id;
-                    favList.val.push(data.id);
-                }
-            })
-            .catch(err => {
-                throw new Error(err)
-            });
+function getSavedImages() {
+    if (!_localStorage) return [];
+    let data = _localStorage.getItem(storageKey);
+    if (data) {
+        data = JSON.parse(data);
     }
+    return data;
+}
 
-    function saveImage() {
-        if (!_localStorage) return;
+function FavoriteList({ onGetNewImage, onSaveImage, savedImages }) {
+    const listItems = van.derive(() => {
+        let isNewAdded = savedImages.val.length > savedImages.oldVal.length;
+        return renderList(savedImages.val, isNewAdded)
+    });
 
-        let favCats = _localStorage.getItem(storageKey);
-        const id = currentId.val;
-        if (favCats) {
-            favCats = JSON.parse((favCats))
-            if (favCats.findIndex(favId => id === favId) === -1) {
-                favCats = favCats.concat(id);
-            }
-            favList.val = favCats;
-            _localStorage.setItem(storageKey, JSON.stringify(favCats));
-        } else {
-            _localStorage.setItem(storageKey, JSON.stringify([id]));
-        }
-    }
+    function renderList(list = [], isNewAdded) {
 
-    function getSavedImages() {
-        if (!_localStorage) return;
-
-        let data = _localStorage.getItem(storageKey);
-        if (data) {
-            data = JSON.parse(data);
-        }
-        favList.val = favList.val.concat(data) || [];
-    }
-
-    function renderList(favList = []) {
-        const list = favList;
-        const liDivs = list.map(id => {
-            
+        return ul({ id: "favorite-list" }, "", list.map((id, index) => {
+            const isLastItem = index === list.length - 1;
             return li({
-                style: "margin: 5px", onclick: (evt) => {
-                    fetchNewImage(evt, id);
-                    liDivs.forEach(div => div.classList.remove("selected"));
+                style: "margin: 5px",
+                class: isNewAdded && isLastItem ? "selected" : "",
+                onclick: (evt) => {
                     evt.currentTarget.classList.add("selected");
-
                 },
             }, id);
-        });
-
-        return liDivs;
+        }))
     }
 
     return aside({ class: "side-bar" },
-        button({ onclick: fetchNewImage },
+        button({ onclick: onGetNewImage },
             "New Cat",
         ),
-        button({ onclick: saveImage },
+        button({ onclick: onSaveImage },
             "Save cat",
         ),
         button({ id: "myBtn" },
@@ -92,14 +51,97 @@ const FavoriteList = (catImageDiv) => {
             h3(
                 "Your favorite cats",
             ),
-            ul({ id: "favorite-list" }, "", renderList(favList.val))
+            listItems
         ),
     )
 }
 
+function showBreedInfo() {
+    const ulDiv = ul({ class: "breed-info-list" });
 
-const App = () => {
+    fetch("https://api.thecatapi.com/v1/breeds", headers)
+        .then(response => response.json())
+        .then(data => {
+            for (const key in data[0]) {
+                van.add(ulDiv, li({}, data[0][key]));
+            }
+        });
+
+
+    return div({ class: "main-view" }, ulDiv);
+}
+
+
+
+
+function App() {
     const catImageDiv = img({ id: "cat-image", alt: "A cat" });
+    const currentScreen = van.state("image-view");
+    const imgData = van.state({});
+    const savedImages = van.state(getSavedImages());
+
+    van.derive(() => {
+        if (Object.keys(imgData.val).length > 0) {
+            const { url: src, width, height } = imgData.val;
+
+            Object.assign(catImageDiv, { width, height, src });
+
+
+        }
+    });
+
+    function saveImage(dataState) {
+        const { id = null } = dataState.val;
+        if (!_localStorage || !id) return;
+
+        let favCats = _localStorage.getItem(storageKey);
+        if (favCats) {
+            favCats = JSON.parse((favCats))
+            if (favCats.findIndex(favId => id === favId) === -1) {
+                favCats = favCats.concat(id);
+            }
+            savedImages.val = favCats;
+            _localStorage.setItem(storageKey, JSON.stringify(favCats));
+        } else {
+            _localStorage.setItem(storageKey, JSON.stringify([id]));
+        }
+    }
+
+    function getNewImage(_, id) {
+        fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
+            .then((response) => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    data = data.pop();
+                }
+
+                imgData.val = data;
+            })
+            .catch(err => {
+                throw new Error(err)
+            });
+    }
+
+    // const detailViewDiv = showBreedInfo();
+
+    const imgViewDiv = div({ class: "main-view" },
+        div({ class: "image-container" },
+            catImageDiv,
+        ),
+        div({ class: "button-container" },
+            button({},
+                "Previous",
+            ),
+            button({ onclick: () => currentScreen.val = "image-view" },
+                "Detail",
+            ),
+            button({},
+                "Next",
+            ),
+        ),
+    );
+
+    getNewImage();
 
     return div(
         header(
@@ -118,20 +160,8 @@ const App = () => {
         ),
         main(
             div({ class: "parent" },
-                FavoriteList(catImageDiv),
-                div({ class: "main-view" },
-                    div({ class: "image-container" },
-                        catImageDiv,
-                    ),
-                    div({ class: "button-container" },
-                        button({ id: "prev-button" },
-                            "Previous",
-                        ),
-                        button({ id: "next-button" },
-                            "Next",
-                        ),
-                    ),
-                ),
+                FavoriteList({ onGetNewImage: getNewImage, savedImages, onSaveImage: saveImage.bind(this, imgData) }),
+                van.derive(() => currentScreen.val == "image-view" ? imgViewDiv : detailViewDiv)
             ),
         ),
         footer(
@@ -141,10 +171,5 @@ const App = () => {
         )
     );
 };
-
-
-
-
-
 
 van.add(document.body, App())
