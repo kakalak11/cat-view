@@ -8,6 +8,14 @@ const storageKey = "favoriteCats";
 const _localStorage = window.localStorage;
 const params = new URLSearchParams(window.location.search);
 
+/*
+NOTE
+
+- Find a way to cache all the fetched image to reduce server calls (like ReactQuery)
+- Improve the css styling of the webpage
+
+*/
+
 function getSavedImages() {
     if (!_localStorage) return [];
     let data = _localStorage.getItem(storageKey);
