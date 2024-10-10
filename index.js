@@ -6,7 +6,7 @@ const headers = { 'x-api-key': API_KEY, "Access-Control-Allow-Origin": true };
 const baseUrl = "https://api.thecatapi.com/v1";
 const storageKey = "favoriteCats";
 const _localStorage = window.localStorage;
-
+const params = new URLSearchParams(window.location.search);
 
 function getSavedImages() {
     if (!_localStorage) return [];
@@ -17,21 +17,26 @@ function getSavedImages() {
     return data;
 }
 
-function FavoriteList({ onGetNewImage, onSaveImage, savedImages }) {
+function FavoriteList({ onGetNewImage, currentId, onSaveImage, savedImages }) {
     const listItems = van.derive(() => {
         let isNewAdded = savedImages.val.length > savedImages.oldVal.length;
-        return renderList(savedImages.val, isNewAdded)
+        return renderList(savedImages.val, isNewAdded, currentId)
     });
 
-    function renderList(list = [], isNewAdded) {
+    function renderList(list = [], isNewAdded, currentId) {
 
         return ul({ id: "favorite-list" }, "", list.map((id, index) => {
             const isLastItem = index === list.length - 1;
+            const isCurrentFavorite = (isNewAdded && isLastItem) || currentId.val === id;
+
             return li({
                 style: "margin: 5px",
-                class: isNewAdded && isLastItem ? "selected" : "",
+                class: isCurrentFavorite ? "selected" : "",
                 onclick: (evt) => {
                     evt.currentTarget.classList.add("selected");
+                    currentId.val = id;
+                    params.set('id', id);
+                    window.history.replaceState({}, '', `${location.pathname}?${params}`);
                 },
             }, id);
         }))
@@ -75,18 +80,33 @@ function showBreedInfo() {
 
 
 function App() {
-    const catImageDiv = img({ id: "cat-image", alt: "A cat" });
     const currentScreen = van.state("image-view");
     const imgData = van.state({});
     const savedImages = van.state(getSavedImages());
+    const currentId = van.state(params.get("id"));
 
     van.derive(() => {
+        // getNewImage(null, currentId.val);
+        fetch(`${baseUrl}/images/${currentId.val ? currentId.val : "search"}`, headers)
+            .then((response) => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    data = data.pop();
+                }
+
+                imgData.val = data;
+            })
+            .catch(err => {
+                throw new Error(err)
+            });
+    });
+
+    const catImageDiv = van.derive(() => {
         if (Object.keys(imgData.val).length > 0) {
-            const { url: src, width, height } = imgData.val;
-
-            Object.assign(catImageDiv, { width, height, src });
-
-
+            const { url: src, width, height, id } = imgData.val;
+            return img({ id: "cat-image", alt: "A cat", width, height, src });
+        } else {
+            return div({}, "No content");
         }
     });
 
@@ -107,23 +127,29 @@ function App() {
         }
     }
 
-    function getNewImage(_, id) {
-        fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
-            .then((response) => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    data = data.pop();
-                }
+    function getNewImage(_, id = "") {
+        // help, i dont know but i had to code like this
+        if (currentId.val) {
+            currentId.val = "";
+        } else if (currentId.val == currentId.oldVal) {
+            fetch(`${baseUrl}/images/${currentId.val ? currentId.val : "search"}`, headers)
+                .then((response) => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data = data.pop();
+                    }
 
-                imgData.val = data;
-            })
-            .catch(err => {
-                throw new Error(err)
-            });
+                    imgData.val = data;
+                })
+                .catch(err => {
+                    throw new Error(err)
+                });
+        } else {
+            currentId.val = id;
+        }
     }
 
     // const detailViewDiv = showBreedInfo();
-
     const imgViewDiv = div({ class: "main-view" },
         div({ class: "image-container" },
             catImageDiv,
@@ -141,7 +167,7 @@ function App() {
         ),
     );
 
-    getNewImage();
+
 
     return div(
         header(
@@ -160,7 +186,7 @@ function App() {
         ),
         main(
             div({ class: "parent" },
-                FavoriteList({ onGetNewImage: getNewImage, savedImages, onSaveImage: saveImage.bind(this, imgData) }),
+                FavoriteList({ onGetNewImage: getNewImage, currentId, savedImages, onSaveImage: saveImage.bind(this, imgData) }),
                 van.derive(() => currentScreen.val == "image-view" ? imgViewDiv : detailViewDiv)
             ),
         ),
