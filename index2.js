@@ -67,6 +67,25 @@ function App() {
     const historyList = [];
     let currentHistoryId = 0;
 
+    van.derive(() => {
+        fetch(
+            `${baseUrl}/images/${currentId.val ? currentId.val : "search"}`,
+            headers
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.length > 0) {
+                    data = data.pop();
+                }
+
+                setUrl(data.id);
+                imgData.val = data;
+            })
+            .catch((err) => {
+                throw new Error(err);
+            });
+    });
+
     const listItems = van.derive(() => {
         const isNewAdded = savedImages.val.length > savedImages.oldVal.length;
 
@@ -83,9 +102,12 @@ function App() {
     const catImageDiv = van.derive(() => {
         if (Object.keys(imgData.val).length > 0) {
             const { url: src, width, height, id } = imgData.val;
+            if (!historyList.includes(id)) {
+                currentHistoryId = historyList.push(id) - 1;
+            }
             return img({ id: "cat-image", alt: "A cat", width, height, src });
         } else {
-            return div({ class: "no-content-image" }, "No content");
+            return div({}, "No content");
         }
     });
 
@@ -106,45 +128,35 @@ function App() {
         }
     }
 
-    function fetchImage(id) {
-        return fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.length > 0) {
-                    data = data.pop();
-                }
-                return data;
-            })
-            .catch((err) => {
-                throw new Error(err);
-            });
-    }
-
-    function getNewImage(id = "") {
+    function getNewImage(_, id = "") {
         // help, i dont know but i had to code like this
-        fetchImage(id).then((data) => {
-            setUrl(data.id);
-            const historyIndex = historyList.indexOf((data) => id === data.id);
-            if (historyIndex === -1) {
-                currentHistoryId = historyList.push(data) - 1;
-            } else {
-                currentHistoryId = historyIndex;
-            }
+        if (currentId.val) {
+            currentId.val = "";
+        } else if (currentId.val == currentId.oldVal) {
+            fetch(
+                `${baseUrl}/images/${currentId.val ? currentId.val : "search"}`,
+                headers
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.length > 0) {
+                        data = data.pop();
+                    }
 
-            imgData.val = data;
-        });
+                    setUrl(data.id);
+                    imgData.val = data;
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+        } else {
+            currentId.val = id;
+        }
     }
 
     function handleNextPrevButton(direction) {
         currentHistoryId += direction;
-        if (historyList[currentHistoryId]) {
-            imgData.val = historyList[currentHistoryId];
-        } else if (currentHistoryId < 0) {
-            imgData.val = {};
-			currentHistoryId = 0;
-        } else {
-            getNewImage();
-        }
+        currentId.val = historyList[currentHistoryId];
     }
 
     function renderList(list = [], isNewAdded) {
@@ -216,7 +228,7 @@ function App() {
                 { class: "parent" },
                 aside(
                     { class: "side-bar" },
-                    button({ onclick: getNewImage.bind(this, "") }, "New Cat"),
+                    button({ onclick: getNewImage }, "New Cat"),
                     button(
                         { onclick: saveImage.bind(this, imgData) },
                         "Save cat"
