@@ -31,8 +31,8 @@ NOTE
 - Find a way to cache all the fetched image to reduce server calls (like ReactQuery)
 - Improve the css styling of the webpage
 - Update detail screen
-- Media query for multi devices
-- Refactor getNewImage logic
+- Media query for multi devices 
+- Refactor getNewImage logic ✅
 
 */
 
@@ -64,8 +64,12 @@ function App() {
     const imgData = van.state({});
     const savedImages = van.state(getSavedImages());
     const currentId = van.state(params.get("id"));
-    const historyList = [];
+    const historyList = van.state([]);
     let currentHistoryId = 0;
+
+    if (currentId.val) {
+        getNewImage(currentId.val);
+    }
 
     const listItems = van.derive(() => {
         const isNewAdded = savedImages.val.length > savedImages.oldVal.length;
@@ -89,6 +93,12 @@ function App() {
         }
     });
 
+    const pageInfoDiv = van.derive(() => {
+        const maxPage = historyList.val.length;
+        const currentPage = historyList.val.findIndex(data => imgData.val.id === data.id) + 1;
+        return p({ class: "page-number" }, `${currentPage}/${maxPage}`);
+    })
+
     function saveImage(dataState) {
         const { id = null } = dataState.val;
         if (!_localStorage || !id) return;
@@ -106,7 +116,7 @@ function App() {
         }
     }
 
-    function fetchImage(id) {
+    async function fetchImage(id) {
         return fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
             .then((response) => response.json())
             .then((data) => {
@@ -120,28 +130,28 @@ function App() {
             });
     }
 
-    function getNewImage(id = "") {
-        // help, i dont know but i had to code like this
-        fetchImage(id).then((data) => {
-            setUrl(data.id);
-            const historyIndex = historyList.indexOf((data) => id === data.id);
-            if (historyIndex === -1) {
-                currentHistoryId = historyList.push(data) - 1;
-            } else {
-                currentHistoryId = historyIndex;
-            }
+    async function getNewImage(id = "") {
+        const data = await fetchImage(id);
 
-            imgData.val = data;
-        });
+        setUrl(data.id);
+        const historyIndex = historyList.val.findIndex(data => id === data.id);
+        if (historyIndex === -1) {
+            historyList.val = historyList.val.concat([data]);
+            currentHistoryId = historyList.val.length - 1;
+        } else {
+            currentHistoryId = historyIndex;
+        }
+
+        imgData.val = data;
     }
 
     function handleNextPrevButton(direction) {
         currentHistoryId += direction;
-        if (historyList[currentHistoryId]) {
-            imgData.val = historyList[currentHistoryId];
+        if (historyList.val[currentHistoryId]) {
+            imgData.val = historyList.val[currentHistoryId];
         } else if (currentHistoryId < 0) {
             imgData.val = {};
-			currentHistoryId = 0;
+            currentHistoryId = 0;
         } else {
             getNewImage();
         }
@@ -158,12 +168,12 @@ function App() {
 
                 return li(
                     {
-                        style: "margin: 5px",
                         class: isCurrentFavorite ? "selected" : "",
                         onclick: (evt) => {
                             evt.currentTarget.classList.add("selected");
                             setUrl(id);
                             currentId.val = id;
+                            getNewImage(id);
                         },
                     },
                     id
@@ -202,7 +212,7 @@ function App() {
         )
     );
 
-    return div(
+    return div({ id: "app" },
         header(
             h1("View cat for peace of mind"),
             p("This is a front-end for cat API"),
@@ -222,6 +232,7 @@ function App() {
                         "Save cat"
                     ),
                     button({ id: "myBtn" }, "Open Saved"),
+                    pageInfoDiv,
                     section(
                         { class: "favorite-section" },
                         h3("Your favorite cats"),
