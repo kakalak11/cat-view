@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robin's Nest</title>
+
+    <style>
+      :root {
+        --main-bg-color: #683a97;
+        /* --main-bg-color: rebeccapurple; */
+
+        --sub-bg-color: rebeccapurple;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background-color: black;
+        border-radius: 50%;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background-color: black;
+        border-radius: 50%;
+
+        /* animation-name: example;
+          animation-duration: 2s;
+          animation-timing-function: ease-out;
+          animation-fill-mode: forwards; */
+      }
+
+      .dot.selected {
+        background-color: var(--main-bg-color);
+        position: relative;
+      }
+
+      .dot.animation-selected {
+        animation-name: selected;
+        animation-duration: 0.5s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        /* animation-delay: 2s; */
+      }
+
+      .dot:nth-child(n) {
+        animation-delay: s;
+      }
+
+      /* The animation code */
+      @keyframes example {
+        from {
+          color: var(--sub-bg-color);
+          background-color: var(--sub-bg-color);
+        }
+
+        to {
+          color: red;
+          background-color: red;
+        }
+      }
+
+      @keyframes selected {
+        0% {
+          top: 0px;
+        }
+
+        37.5% {
+          top: -15px;
+        }
+
+        50% {
+          top: -20px;
+        }
+
+        87.5% {
+          top: -15px;
+        }
+
+        100% {
+          top: 0px;
+        }
+      }
+
+      .bar-title {
+        color: var(--main-bg-color);
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="bar-title">Rating bar dot-styled</h1>
+    <div class="wrapper">
+      <div class="dot selected animation-selected"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </body>
+
+  <script>
+    document.querySelectorAll(".dot").forEach((dot, index) => {
+      dot.style = `animation-delay: ${index / 7}s; position:relative`;
+      dot.classList.add("animation-selected");
+    });
+  </script>
+</html>
