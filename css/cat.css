@@ -1,144 +1,144 @@
 header,
 footer {
-    background-color: darkgray;
-    padding: 10px;
-    text-align: center;
+  background-color: darkgray;
+  padding: 10px;
+  text-align: center;
 }
 
 main {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: auto;
 }
 
 .parent {
-    display: grid;
-    grid-template-columns: minmax(250px, 20%) 1fr;
-    column-gap: 10px;
+  display: grid;
+  grid-template-columns: minmax(250px, 20%) 1fr;
+  column-gap: 10px;
 }
 
-.side-bar>button {
-    display: block;
-    width: 100%;
-    margin: 0;
-    margin-bottom: 10px;
-    padding: 10px 24px;
+.side-bar > button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 10px 24px;
 
-    border-radius: 0%;
-    border: none;
-    background-color: grey;
-    color: aliceblue;
+  border-radius: 0%;
+  border: none;
+  background-color: grey;
+  color: aliceblue;
 }
 
-.side-bar>button:hover {
-    background-color: lightgrey;
+.side-bar > button:hover {
+  background-color: lightgrey;
 }
 
-.side-bar>button:active {
-    background-color: darkgrey;
+.side-bar > button:active {
+  background-color: darkgrey;
 }
 
 .side-bar {
-    background-color: aqua;
-    position: relative;
-    padding: 10px;
+  background-color: aqua;
+  position: relative;
+  padding: 10px;
 }
 
 .main-view {
-    background-color: slategray;
-    height: 100%;
+  background-color: slategray;
+  height: 100%;
 }
 
 .image-container {
-    height: calc(90% - 20px);
-    width: auto;
+  height: calc(90% - 20px);
+  width: auto;
 
-    margin: 10px auto;
-    position: relative;
+  margin: 10px auto;
+  position: relative;
 }
 
-.image-container>img {
-    position: absolute;
+.image-container > img {
+  position: absolute;
 
-    height: 100%;
-    width: auto;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    top: 50%;
+  height: 100%;
+  width: auto;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
 }
 
 .no-content-image {
-    text-align: center;
-    font-size: 2em;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 2em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .button-container {
-    height: 10%;
-    background-color: cadetblue;
+  height: 10%;
+  background-color: cadetblue;
 
-    display: flex;
-    justify-content: center;
-    column-gap: 20px;
+  display: flex;
+  justify-content: center;
+  column-gap: 20px;
 }
 
-.button-container>button {
-    display: inline-block;
-    height: 80%;
-    margin: auto 0px;
-    width: 200px;
-    font-size: 1.5rem;
-    border-radius: 0%;
-    border: none;
-    background-color: chartreuse;
+.button-container > button {
+  display: inline-block;
+  height: 80%;
+  margin: auto 0px;
+  width: 200px;
+  font-size: 1.5rem;
+  border-radius: 0%;
+  border: none;
+  background-color: chartreuse;
 }
 
-.button-container>button:hover {
-    background-color: greenyellow;
+.button-container > button:hover {
+  background-color: greenyellow;
 }
 
-.button-container>button:active {
-    background-color: green;
+.button-container > button:active {
+  background-color: green;
 }
 
 .favorite-section {
-    background-color: burlywood;
-    padding: 10px;
-    overflow-y: scroll;
-    max-height: 322px;
+  background-color: burlywood;
+  padding: 10px;
+  overflow-y: scroll;
+  height: 322px;
 }
 
-.favorite-section>ul>li {
-    cursor: pointer;
+.favorite-section > ul > li {
+  cursor: pointer;
 
-    margin: 5px;
+  margin: 5px;
 }
 
-.favorite-section>ul>li.selected::after {
-    content: "👈";
+.favorite-section > ul > li.selected::after {
+  content: "👈";
 }
 
-.favorite-section>ul>li.selected {
-    color: red;
+.favorite-section > ul > li.selected {
+  color: red;
 }
 
-.favorite-section>h3 {
-    text-align: center;
+.favorite-section > h3 {
+  text-align: center;
 }
 
 .breed-info-list {
-    overflow-y: scroll;
-    height: calc(100% - 20px);
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  overflow-y: scroll;
+  height: calc(100% - 20px);
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .page-number {
-    text-align: center;
-    background-color:lightgray;
+  text-align: center;
+  background-color: lightgray;
 }

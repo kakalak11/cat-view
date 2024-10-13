@@ -1,117 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing page</title>
-    <style>
-        .dot {
-            display: inline-block;
-            width: 25px;
-            height: 25px;
-            background-color: black;
-            border-radius: 50%;
-        }
+  </head>
 
-        .background-bar {
-            width: 300px;
-            height: 20px;
-            background-color: grey;
+  <body>
+    <a href="./html/cat.html">Cat Viewee</a>
 
-            position: relative;
-        }
-
-        .progress-bar {
-            width: 1%;
-            height: 50%;
-            background-color: chartreuse;
-
-            position: absolute;
-            top: 25%;
-            left: 1%;
-        }
-
-        .dot.animation-selected {
-            animation-name: selected;
-            animation-duration: 0.5s;
-            animation-timing-function: ease-in-out;
-            animation-fill-mode: forwards;
-            /* animation-iteration-count: infinite; */
-            position: relative;
-            /* animation-delay: 2s; */
-        }
-
-        /* The animation code */
-        @keyframes selected {
-            0% {
-                top: 0px;
-            }
-
-            37.5% {
-                top: -15px;
-            }
-
-            50% {
-                top: -20px;
-            }
-
-            87.5% {
-                top: -15px;
-            }
-
-            100% {
-                top: 0px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <a href="./html/cat.html">Cat Viewer</a>
     <a href="./html/bar.html">Robin Nest</a>
-
-    <h1>Rating bar dot-styled</h1>
-
-    <div class="wrapper">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>
-
-    <h1>Loading bar</h1>
-
-    <div class="background-bar">
-        <div class="progress-bar"></div>
-    </div>
-    <p class="percent-label">Percent: 0%</p>
-
-    <script>
-        const progressBarDiv = document.querySelector(".progress-bar");
-        const percentLabelDiv = document.querySelector(".percent-label");
-        let progress = 0;
-        let intervalId;
-        intervalId = setInterval(() => {
-
-            progressBarDiv.style = `width: ${Math.round(progress / 100 * 98)}%`;
-            percentLabelDiv.innerHTML = `Percent: ${progress}%`;
-
-            if (progress == 100) {
-                progress = 0;
-                // clearInterval(intervalId);
-                // percentLabelDiv.innerHTML += " - Không có gì đâu mà đợi";
-            }
-
-            progress++;
-        }, 50);
-    </script>
-
-    
-
-    
-
-</body>
-
+  </body>
 </html>
