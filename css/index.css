@@ -1,0 +1,41 @@
+.dot.animation-selected {
+    animation-name: selected;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    position: relative;
+}
+
+.dot {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-color: black;
+    border-radius: 50%;
+}
+
+@keyframes selected {
+    0% {
+        top: 0px;
+    }
+
+    37.5% {
+        top: -15px;
+    }
+
+    50% {
+        top: -20px;
+    }
+
+    87.5% {
+        top: -15px;
+    }
+
+    100% {
+        top: 0px;
+    }
+}
+
+.bar-title {
+    color: var(--main-bg-color);
+}
