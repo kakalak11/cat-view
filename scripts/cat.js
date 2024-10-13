@@ -1,4 +1,5 @@
-import van from "https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.min.js";
+import loadingScreen from "./loadingScreen.js";
+
 const {
     a,
     aside,
@@ -59,21 +60,23 @@ function showBreedInfo() {
     return div({ class: "main-view" }, ulDiv);
 }
 
+
 function App() {
     const currentScreen = van.state("image-view");
     const imgData = van.state({});
     const savedImages = van.state(getSavedImages());
     const currentId = van.state(params.get("id"));
     const historyList = van.state([]);
+    const isLoading = van.state(false);
     let currentHistoryId = 0;
 
     if (currentId.val) {
         getNewImage(currentId.val);
     }
 
-    const listItems = van.derive(() => {
-        const isNewAdded = savedImages.val.length > savedImages.oldVal.length;
+    van.derive(() => loadingScreen.hidden = !isLoading.val);
 
+    const listItems = van.derive(() => {
         if (!savedImages.val.length) {
             return p(
                 { style: "font-size:0.75em;text-align:center" },
@@ -98,7 +101,11 @@ function App() {
     const catImageDiv = van.derive(() => {
         if (Object.keys(imgData.val).length > 0) {
             const { url: src, width, height, id } = imgData.val;
-            return img({ id: "cat-image", alt: "A cat", width, height, src });
+            return img({
+                id: "cat-image", alt: "A cat", width, height, src, onload: () => {
+                    isLoading.val = false;
+                }
+            });
         } else {
             return div({ class: "no-content-image" }, "No content");
         }
@@ -128,6 +135,7 @@ function App() {
     }
 
     async function fetchImage(id) {
+        isLoading.val = true;
         return fetch(`${baseUrl}/images/${id ? id : "search"}`, headers)
             .then((response) => response.json())
             .then((data) => {
@@ -137,6 +145,7 @@ function App() {
                 return data;
             })
             .catch((err) => {
+                isLoading.val = false;
                 throw new Error(err);
             });
     }
@@ -251,3 +260,4 @@ function App() {
     );
 }
 van.add(document.body, App());
+van.add(document.body, loadingScreen);

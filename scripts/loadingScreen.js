@@ -1,6 +1,6 @@
 const { div } = van.tags;
 
-export default function loadingScreen() {
+function loadingScreen() {
 
 
     const _div = div({ id: "loading-scrren-wrapper", class: "wrapper" },
@@ -9,7 +9,8 @@ export default function loadingScreen() {
         div({ class: "dot" }),
         div({ class: "dot" }),
         div({ class: "dot" }),
-    )
+    );
+    const loadingLabel = div({ class: "wrapper loading-label" }, div({ class: "loading-label" }, "LOADING"))
 
     let count = 0;
     let loopRate = 1000 * 0.2;
@@ -20,5 +21,9 @@ export default function loadingScreen() {
         count++;
     }, loopRate);
 
-    return _div;
-} 
+    const bgGradientDiv = div({ class: "gradient" }, loadingLabel, _div);
+
+    return bgGradientDiv;
+}
+
+export default loadingScreen();
