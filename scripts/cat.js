@@ -243,8 +243,8 @@ function App() {
                 { class: "parent" },
                 aside(
                     { class: "side-bar" },
-                    button({ class: "button", onclick: getNewImage.bind(this, "") }, "New Cat"),
-                    button({ class: "button", onclick: saveImage }, "Save cat"),
+                    button({ onclick: getNewImage.bind(this, "") }, "New Cat"),
+                    button({ onclick: saveImage }, "Save cat"),
                     pageInfoDiv,
                     section(
                         { class: "favorite-section" },

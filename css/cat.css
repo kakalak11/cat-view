@@ -15,38 +15,7 @@ main {
   column-gap: 10px;
 }
 
-.button {
-  display: block;
-  width: 100%;
-  margin: 0;
-  margin-bottom: 10px;
-  padding: 10px 24px;
 
-  border-radius: 5px;
-  border: none;
-  background-color: inherit;
-  color: black;
-}
-
-.button:hover {
-  background-color: grey;
-
-  animation: show-button 0.5s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-in-out;
-}
-
-@keyframes show-button {
-  0% {
-    background-color: inherit;
-    color: black;
-  }
-
-  100% {
-    background-color: grey;
-    color: aliceblue;
-  }
-}
 
 .side-bar {
   background-color: aqua;
@@ -151,4 +120,73 @@ main {
 .page-number {
   text-align: center;
   background-color: lightgray;
+}
+
+/* ---------- Button ---------- */
+
+.side-bar>button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 10px 24px;
+
+  border-radius: 5px;
+  border: none;
+  background-color: inherit;
+  color: black;
+  position: relative;
+}
+
+.side-bar>button::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: grey;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  border-radius: inherit;
+  opacity: 0;
+}
+
+.side-bar>button:hover::before {
+  animation-name: fly-out;
+  animation-duration: 0.2s; 
+}
+
+@keyframes fly-out {
+  0% {
+    opacity: 255;
+    width: 100%;
+    height: 100%;
+  }
+
+  100% {
+    opacity: 0;
+    width: 110%;
+    height: 110%;
+  }
+}
+
+.side-bar>button:hover {
+  background-color: grey;
+
+  animation: show-button 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes show-button {
+  0% {
+    background-color: inherit;
+    color: black;
+  }
+
+  100% {
+    background-color: grey;
+    color: aliceblue;
+  }
 }
