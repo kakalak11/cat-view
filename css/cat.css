@@ -1,13 +1,11 @@
 header,
 footer {
-  background-color: darkgray;
+  /* background-color: darkgray; */
   padding: 10px;
   text-align: center;
 }
 
 main {
-  margin-top: 10px;
-  margin-bottom: 10px;
   height: auto;
 }
 
@@ -17,25 +15,37 @@ main {
   column-gap: 10px;
 }
 
-.side-bar > button {
+.button {
   display: block;
   width: 100%;
   margin: 0;
   margin-bottom: 10px;
   padding: 10px 24px;
 
-  border-radius: 0%;
+  border-radius: 5px;
   border: none;
+  background-color: inherit;
+  color: black;
+}
+
+.button:hover {
   background-color: grey;
-  color: aliceblue;
+
+  animation: show-button 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
 }
 
-.side-bar > button:hover {
-  background-color: lightgrey;
-}
+@keyframes show-button {
+  0% {
+    background-color: inherit;
+    color: black;
+  }
 
-.side-bar > button:active {
-  background-color: darkgrey;
+  100% {
+    background-color: grey;
+    color: aliceblue;
+  }
 }
 
 .side-bar {
@@ -57,7 +67,7 @@ main {
   position: relative;
 }
 
-.image-container > img {
+.image-container>img {
   position: absolute;
 
   height: 100%;
@@ -85,7 +95,7 @@ main {
   column-gap: 20px;
 }
 
-.button-container > button {
+.button-container>button {
   display: inline-block;
   height: 80%;
   margin: auto 0px;
@@ -96,11 +106,11 @@ main {
   background-color: chartreuse;
 }
 
-.button-container > button:hover {
+.button-container>button:hover {
   background-color: greenyellow;
 }
 
-.button-container > button:active {
+.button-container>button:active {
   background-color: green;
 }
 
@@ -111,21 +121,21 @@ main {
   height: 322px;
 }
 
-.favorite-section > ul > li {
+.favorite-section>ul>li {
   cursor: pointer;
 
   margin: 5px;
 }
 
-.favorite-section > ul > li.selected::after {
+.favorite-section>ul>li.selected::after {
   content: "👈";
 }
 
-.favorite-section > ul > li.selected {
+.favorite-section>ul>li.selected {
   color: red;
 }
 
-.favorite-section > h3 {
+.favorite-section>h3 {
   text-align: center;
 }
 

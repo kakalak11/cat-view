@@ -30,6 +30,8 @@ const params = new URLSearchParams(window.location.search);
 NOTE
 
 - Find a way to cache all the fetched image to reduce server calls (like ReactQuery) ❎
+--> Browser automatically handle this 😂
+
 - Improve the css styling of the webpage
 - Update detail screen
 - Media query for multi devices 
@@ -115,7 +117,7 @@ function App() {
         const maxPage = historyList.val.length;
         const currentPage =
             historyList.val.findIndex((data) => imgData.val.id === data.id) + 1;
-        return p({ class: "page-number" }, `${currentPage}/${maxPage}`);
+        return p({ class: "page-number" }, `Page: ${currentPage}/${maxPage}`);
     });
 
     function saveImage(evt) {
@@ -241,9 +243,8 @@ function App() {
                 { class: "parent" },
                 aside(
                     { class: "side-bar" },
-                    button({ onclick: getNewImage.bind(this, "") }, "New Cat"),
-                    button({ onclick: saveImage }, "Save cat"),
-                    button({ id: "myBtn" }, "Open Saved"),
+                    button({ class: "button", onclick: getNewImage.bind(this, "") }, "New Cat"),
+                    button({ class: "button", onclick: saveImage }, "Save cat"),
                     pageInfoDiv,
                     section(
                         { class: "favorite-section" },
