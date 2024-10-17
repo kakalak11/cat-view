@@ -1,6 +1,6 @@
 header,
 footer {
-  background-color: aliceblue;
+  background-color: #FFF0D1;
   padding: 10px;
   text-align: center;
   margin: 10px;
@@ -72,7 +72,7 @@ main {
 }
 
 .favorite-section {
-  background-color: lightgray;
+  background-color: #FFF0D1;
   padding: 10px;
   overflow-y: scroll;
   scroll-behavior: smooth;
@@ -198,7 +198,8 @@ main {
   font-size: 1.5rem;
   border-radius: 4em;
   border: none;
-  background-color: chartreuse;
+  background-color: #664343;
+  color: white;
   transform: scale(1);
 
   transition: background-color 0.2s;
@@ -206,11 +207,11 @@ main {
 }
 
 .button-container>button:hover {
-  background-color: greenyellow;
+  background-color: #795757;
   transform: scale(1.1);
 }
 
 .button-container>button:active {
-  background-color: green;
+  background-color: #3B3030;
   transform: scale(1.05);
 }
