@@ -1,8 +1,19 @@
 header,
 footer {
-  /* background-color: darkgray; */
+  background-color: aliceblue;
   padding: 10px;
   text-align: center;
+  margin: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: .5em;
+}
+
+body {
+  background-image: url("../images/BG.jpg");
+  background-size: cover;
 }
 
 main {
@@ -18,14 +29,19 @@ main {
 
 
 .side-bar {
-  background-color: aqua;
+  /* background-color: aqua; */
   position: relative;
   padding: 10px;
+
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 1em;
 }
 
 .main-view {
-  background-color: slategray;
+  /* background-color: slategray; */
   height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 1em;
 }
 
 .image-container {
@@ -55,39 +71,13 @@ main {
   transform: translate(-50%, -50%);
 }
 
-.button-container {
-  height: 10%;
-  background-color: cadetblue;
-
-  display: flex;
-  justify-content: center;
-  column-gap: 20px;
-}
-
-.button-container>button {
-  display: inline-block;
-  height: 80%;
-  margin: auto 0px;
-  width: 200px;
-  font-size: 1.5rem;
-  border-radius: 0%;
-  border: none;
-  background-color: chartreuse;
-}
-
-.button-container>button:hover {
-  background-color: greenyellow;
-}
-
-.button-container>button:active {
-  background-color: green;
-}
-
 .favorite-section {
-  background-color: burlywood;
+  background-color: lightgray;
   padding: 10px;
   overflow-y: scroll;
+  scroll-behavior: smooth;
   height: 322px;
+  border-radius: .5em;
 }
 
 .favorite-section>ul>li {
@@ -119,7 +109,7 @@ main {
 
 .page-number {
   text-align: center;
-  background-color: lightgray;
+  /* background-color: lightgray; */
 }
 
 /* ---------- Button ---------- */
@@ -154,7 +144,7 @@ main {
 
 .side-bar>button:hover::before {
   animation-name: fly-out;
-  animation-duration: 0.2s; 
+  animation-duration: 0.2s;
 }
 
 @keyframes fly-out {
@@ -189,4 +179,38 @@ main {
     background-color: grey;
     color: aliceblue;
   }
+}
+
+.button-container {
+  height: 10%;
+  /* background-color: cadetblue; */
+
+  display: flex;
+  justify-content: center;
+  column-gap: 40px;
+}
+
+.button-container>button {
+  display: inline-block;
+  height: 80%;
+  margin: auto 0px;
+  width: 200px;
+  font-size: 1.5rem;
+  border-radius: 4em;
+  border: none;
+  background-color: chartreuse;
+  transform: scale(1);
+
+  transition: background-color 0.2s;
+  transition: transform 0.2s;
+}
+
+.button-container>button:hover {
+  background-color: greenyellow;
+  transform: scale(1.1);
+}
+
+.button-container>button:active {
+  background-color: green;
+  transform: scale(1.05);
 }
